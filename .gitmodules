@@ -1,0 +1,3 @@
+[submodule "thirdparty/Direct3DHook"]
+	path = thirdparty/Direct3DHook
+	url = https://github.com/spazzarama/Direct3DHook.git
