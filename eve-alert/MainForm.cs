@@ -105,6 +105,11 @@ namespace eve_alert
             }
         }
 
+        private void toggleState()
+        {
+            toggleState(!enabled);
+        }
+
         private void toggleState(bool value)
         {
             enabled = value;
@@ -114,6 +119,7 @@ namespace eve_alert
 
             if (enabled)
             {
+                notificationForm = new NotificationForm(settings);
                 List<string> systems = this.settings.SystemNames;
                 logAlert = new LogAlert(attention, systems, this.settings.IntelChannel);
                 logAlert.start();
@@ -129,11 +135,6 @@ namespace eve_alert
                 if (gameLogAlert != null)
                     gameLogAlert.stop();
             }
-        }
-
-        private void toggleState()
-        {
-            toggleState(!enabled);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)

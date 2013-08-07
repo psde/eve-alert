@@ -74,6 +74,7 @@ namespace eve_alert
             }
 
             this.Visible = true;
+            this.Show();
             
             if (timeout > 0)
             {
