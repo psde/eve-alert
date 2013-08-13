@@ -190,7 +190,8 @@ namespace eve_alert
                 if (important)
                     playAttentionSound();
 
-                notificationForm.ShowNotification(7500, (important ? Color.Red : Color.Green), title, message);
+                //notificationForm.ShowNotification(7500, (important ? Color.Red : Color.Green), title, message);
+                (new NotificationForm(settings)).ShowNotification(7500, (important ? Color.Red : Color.Green), title, message);
 
                 ListViewItem newItem = new ListViewItem(time.ToString("HH:MM:ss"));
                 newItem.SubItems.Add(important.ToString());
