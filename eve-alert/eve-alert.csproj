@@ -103,9 +103,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="evealert.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Resources\evealert.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
