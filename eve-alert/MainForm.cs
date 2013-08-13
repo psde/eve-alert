@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Media;
 using System.IO;
+using evealert.Properties;
 
 namespace eve_alert
 {
@@ -25,6 +26,7 @@ namespace eve_alert
         public MainForm()
         {
             InitializeComponent();
+            this.Icon = Resources.evealert;
 
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/eve-alert/";
             configdir = appdata + "config.xml";

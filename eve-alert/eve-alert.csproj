@@ -8,7 +8,7 @@
     <ProjectGuid>{F66DFE76-7EF6-4BD1-BFBE-8A97A7842A05}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>eve_alert</RootNamespace>
+    <RootNamespace>evealert</RootNamespace>
     <AssemblyName>eve-alert</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>eve-alert.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\evealert.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -87,6 +87,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SettingsForm.resx">
       <DependentUpon>SettingsForm.cs</DependentUpon>
@@ -102,7 +103,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="eve-alert.ico" />
+    <None Include="evealert.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\evealert.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

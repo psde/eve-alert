@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Media;
+using evealert.Properties;
 
 namespace eve_alert
 {
@@ -17,6 +18,7 @@ namespace eve_alert
         public SettingsForm(Settings settings)
         {
             InitializeComponent();
+            this.Icon = Resources.evealert;
             
             this.settings = settings;
 
