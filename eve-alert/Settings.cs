@@ -5,7 +5,7 @@ using System.Text;
 using System.Xml.Serialization;
 using System.IO;
 
-namespace eve_alert
+namespace evealert
 {
     public class Account
     {

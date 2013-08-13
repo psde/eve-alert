@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.Timers;
 using System.Runtime.InteropServices;
 
-namespace eve_alert
+namespace evealert
 {
     public partial class NotificationForm : Form
     {

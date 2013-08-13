@@ -8,9 +8,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Media;
 using System.IO;
+using System.Diagnostics;
 using evealert.Properties;
 
-namespace eve_alert
+namespace evealert
 {
     public partial class MainForm : Form
     {
@@ -128,6 +129,7 @@ namespace eve_alert
 
                 gameLogAlert = new GameLogAlert(attention, this.settings.CharacterName, "Dread".Split(new char[] { ',' }).ToList());
                 gameLogAlert.start();
+
             }
             else
             {

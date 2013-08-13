@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace eve_alert
+namespace evealert
 {
     public delegate void AlertCallback(DateTime time, bool important, string title, string text);
 

@@ -1,4 +1,4 @@
-﻿namespace eve_alert
+﻿namespace evealert
 {
     partial class MainForm
     {
@@ -95,7 +95,7 @@
             // buttonStartStop
             // 
             this.buttonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStartStop.Location = new System.Drawing.Point(545, 427);
+            this.buttonStartStop.Location = new System.Drawing.Point(539, 476);
             this.buttonStartStop.Name = "buttonStartStop";
             this.buttonStartStop.Size = new System.Drawing.Size(75, 23);
             this.buttonStartStop.TabIndex = 1;
@@ -115,7 +115,7 @@
             this.groupSettings.Controls.Add(this.textSystems);
             this.groupSettings.Location = new System.Drawing.Point(12, 27);
             this.groupSettings.Name = "groupSettings";
-            this.groupSettings.Size = new System.Drawing.Size(608, 101);
+            this.groupSettings.Size = new System.Drawing.Size(602, 101);
             this.groupSettings.TabIndex = 2;
             this.groupSettings.TabStop = false;
             this.groupSettings.Text = "Stuff";
@@ -126,7 +126,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textCharacter.Location = new System.Drawing.Point(86, 69);
             this.textCharacter.Name = "textCharacter";
-            this.textCharacter.Size = new System.Drawing.Size(513, 20);
+            this.textCharacter.Size = new System.Drawing.Size(507, 20);
             this.textCharacter.TabIndex = 5;
             // 
             // label3
@@ -144,7 +144,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textChannel.Location = new System.Drawing.Point(86, 42);
             this.textChannel.Name = "textChannel";
-            this.textChannel.Size = new System.Drawing.Size(513, 20);
+            this.textChannel.Size = new System.Drawing.Size(507, 20);
             this.textChannel.TabIndex = 3;
             // 
             // label2
@@ -171,7 +171,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textSystems.Location = new System.Drawing.Point(86, 16);
             this.textSystems.Name = "textSystems";
-            this.textSystems.Size = new System.Drawing.Size(513, 20);
+            this.textSystems.Size = new System.Drawing.Size(507, 20);
             this.textSystems.TabIndex = 0;
             // 
             // menuStrip1
@@ -180,7 +180,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(632, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(626, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -227,7 +227,7 @@
             this.listLog.Location = new System.Drawing.Point(12, 144);
             this.listLog.MultiSelect = false;
             this.listLog.Name = "listLog";
-            this.listLog.Size = new System.Drawing.Size(608, 277);
+            this.listLog.Size = new System.Drawing.Size(602, 326);
             this.listLog.TabIndex = 4;
             this.listLog.UseCompatibleStateImageBehavior = false;
             this.listLog.View = System.Windows.Forms.View.Details;
@@ -253,7 +253,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(632, 462);
+            this.ClientSize = new System.Drawing.Size(626, 511);
             this.Controls.Add(this.listLog);
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupSettings);

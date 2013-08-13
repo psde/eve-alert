@@ -10,7 +10,7 @@ using System.IO;
 using System.Media;
 using evealert.Properties;
 
-namespace eve_alert
+namespace evealert
 {
     public partial class SettingsForm : Form
     {

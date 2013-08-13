@@ -7,7 +7,7 @@ using System.IO;
 using System.Globalization;
 using System.Windows.Forms;
 
-namespace eve_alert
+namespace evealert
 {
     class GameLogAlert : Alert
     {        

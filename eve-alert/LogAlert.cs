@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Timers;
 using System.Globalization;
 
-namespace eve_alert
+namespace evealert
 {
     class LogAlert : Alert
     {

@@ -1,4 +1,4 @@
-﻿namespace eve_alert
+﻿namespace evealert
 {
     partial class SettingsForm
     {
