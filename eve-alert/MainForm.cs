@@ -10,27 +10,41 @@ using System.Media;
 using System.IO;
 using System.Diagnostics;
 using evealert.Properties;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Xml;
 
 namespace evealert
 {
     public partial class MainForm : Form
     {
+        public static AlertCallback alertCallback;
+
         private Settings settings;
         private string configdir;
 
+        private Account selectedAccount;
+        private AlertInterface selectedAlert;
+
         private NotificationForm notificationForm;
 
-        private LogAlert logAlert = null;
-        private GameLogAlert gameLogAlert = null;
         private bool enabled = false;
 
         public MainForm()
         {
+            MainForm.alertCallback = this.attention;
+
             InitializeComponent();
             this.Icon = Resources.evealert;
 
             string appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/eve-alert/";
+
+            #if DEBUG
+            configdir = appdata + "config_testing.xml";
+            #else
             configdir = appdata + "config.xml";
+            #endif
+
             if (Directory.Exists(appdata) == false)
             {
                 Directory.CreateDirectory(appdata);
@@ -47,10 +61,6 @@ namespace evealert
                 settings = Settings.fromXML(configdir);
             }
 
-            this.textChannel.Text = settings.IntelChannel;
-            this.textCharacter.Text = settings.CharacterName;
-            this.textSystems.Text = String.Join(",", settings.SystemNames);
-
             if (settings.StartStarted)
             {
                 this.toggleState();
@@ -58,7 +68,15 @@ namespace evealert
 
             notificationForm = new NotificationForm(settings);
 
+            /*Account acc = new Account();
+            acc.Charname = "TestAccount";
+            acc.alertModules.Add(new ChatLogAlert(new List<string> {"Test1", "Test2" }, "Testchannel"));
+            settings.Accounts.Add(acc);
+            saveSettings();*/
+
+            refreshAccounts();
             refreshContextMenu();
+            refreshGui();
         }
 
         private void refreshContextMenu()
@@ -91,12 +109,24 @@ namespace evealert
             contextNotify.Items.Add(exitMenuButton);
         }
 
+        private void refreshAccounts()
+        {
+            this.listAccounts.Items.Clear();
+
+            foreach (Account account in settings.Accounts)
+            {
+                ListViewItem newItem = new ListViewItem(account.Charname);
+                newItem.Tag = account;
+                listAccounts.Items.Add(newItem);
+            }
+        }
+
         private void refreshGui()
         {
             refreshContextMenu();
 
-            this.groupSettings.Enabled = !enabled;
-            if (enabled)
+            this.groupCharacterSettings.Enabled = !this.enabled;
+            if (this.enabled)
             {
                 buttonStartStop.Text = "Stop";
                 notifyIcon.Text = "EVE Alert - Running";
@@ -106,38 +136,76 @@ namespace evealert
                 buttonStartStop.Text = "Start";
                 notifyIcon.Text = "EVE Alert - Stopped";
             }
+
+            this.buttonAddAlert.Enabled = (selectedAccount != null);
+            this.buttonRemoveAlert.Enabled = (selectedAlert != null);
+            this.buttonConfigureAlert.Enabled = (selectedAlert != null);
+        }
+
+        private void selectAccount(Account acc)
+        {
+            this.selectedAccount = acc;
+            selectAlert(null);
+
+            this.listModules.Items.Clear();
+
+            if (acc == null)
+            {
+                this.textCharname.Text = "";
+                return;
+            }
+
+            textCharname.Text = acc.Charname;
+            foreach(AlertInterface alert in acc.alertModules)
+            {
+                ListViewItem newItem = new ListViewItem(alert.GetName()); 
+                newItem.SubItems.Add(alert.GetDescription());
+                newItem.Tag = alert;
+                listModules.Items.Add(newItem);
+            }
+
+            refreshGui();
+        }
+
+        private void selectAlert(AlertInterface alert)
+        {
+            this.selectedAlert = alert;
+
+            refreshGui();
         }
 
         private void toggleState()
         {
-            toggleState(!enabled);
+            toggleState(!this.enabled);
         }
 
         private void toggleState(bool value)
         {
-            enabled = value;
+            this.enabled = value;
 
             refreshGui();
             saveSettings();
 
-            if (enabled)
+            if (this.enabled)
             {
                 notificationForm = new NotificationForm(settings);
-                List<string> systems = this.settings.SystemNames;
-                logAlert = new LogAlert(attention, systems, this.settings.IntelChannel);
-                logAlert.start();
-
-                gameLogAlert = new GameLogAlert(attention, this.settings.CharacterName, "Dread".Split(new char[] { ',' }).ToList());
-                gameLogAlert.start();
-
+                foreach (Account acc in settings.Accounts)
+                {
+                    foreach (AlertInterface alert in acc.alertModules)
+                    {
+                        alert.start();
+                    }
+                }
             }
             else
             {
-                if (logAlert != null)
-                    logAlert.stop();
-
-                if (gameLogAlert != null)
-                    gameLogAlert.stop();
+                foreach (Account acc in settings.Accounts)
+                {
+                    foreach (AlertInterface alert in acc.alertModules)
+                    {
+                        alert.stop();
+                    }
+                }
             }
         }
 
@@ -150,6 +218,8 @@ namespace evealert
                 e.Cancel = true;
                 return;
             }
+
+            toggleState(false);
 
             notifyIcon.Visible = false;
             saveSettings();
@@ -219,9 +289,6 @@ namespace evealert
 
         private void saveSettings()
         {
-            settings.CharacterName = this.textCharacter.Text;
-            settings.SystemNames = this.textSystems.Text.Split(new char[] { ',' }).ToList(); ;
-            settings.IntelChannel = this.textChannel.Text;
             Settings.toXML(settings, configdir);
         }
 
@@ -234,6 +301,102 @@ namespace evealert
                     Hide();
                 }));
             }
+        }
+
+        private void buttonAddAccount_Click(object sender, EventArgs e)
+        {
+            Account newAccount = new Account();
+            newAccount.Charname = "New Account";
+            settings.Accounts.Add(newAccount);
+            //this.selectAccount(newAccount);
+            refreshAccounts();
+            refreshGui();
+        }
+
+        private void buttonRemoveAccount_Click(object sender, EventArgs e)
+        {
+            if (selectedAccount == null)
+                return;
+
+            DialogResult result = MessageBox.Show("Delete Account?", "Delete Account?", MessageBoxButtons.YesNo);
+            if (result == System.Windows.Forms.DialogResult.Yes)
+            {
+                int index = settings.Accounts.FindIndex(foo => foo == selectedAccount);
+                settings.Accounts.Remove(selectedAccount);
+                selectAccount(null);
+                refreshAccounts();
+            }
+
+            refreshGui();
+        }
+
+        private void listAccounts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.listAccounts.SelectedItems.Count != 1)
+            {
+                selectAccount(null);
+                return;
+            }
+            selectAccount((Account)this.listAccounts.SelectedItems[0].Tag);
+        }
+
+        private void listModules_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (this.listModules.SelectedItems.Count != 1)
+            {
+                selectAlert(null);
+                return;
+            }
+
+            selectAlert((AlertInterface)this.listModules.SelectedItems[0].Tag);
+        }
+
+        private void buttonAddAlert_Click(object sender, EventArgs e)
+        {
+            List<AlertFactoryInterface> alerts = new List<AlertFactoryInterface>();
+            alerts.Add(ChatLogAlert.factory);
+            alerts.Add(GameLogAlert.factory);
+
+            NewAlert dialog = new NewAlert(alerts, selectedAccount.Charname);
+            dialog.ShowDialog();
+            if (dialog.newAlert != null)
+            {
+                selectedAccount.alertModules.Add(dialog.newAlert);
+                selectAccount(selectedAccount);
+            }
+        }
+
+        private void buttonConfigureAlert_Click(object sender, EventArgs e)
+        {
+            if (this.listModules.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            AlertInterface alert = (AlertInterface)this.listModules.SelectedItems[0].Tag;
+            int index = selectedAccount.alertModules.FindIndex(foo => foo == alert);
+            selectedAccount.alertModules[index] = alert.getFactory().Modify(alert);
+            selectAccount(selectedAccount);
+        }
+
+        private void buttonRemoveAlert_Click(object sender, EventArgs e)
+        {
+            if (this.listModules.SelectedItems.Count != 1)
+            {
+                return;
+            }
+            selectedAccount.alertModules.Remove((AlertInterface)this.listModules.SelectedItems[0].Tag);
+            selectAlert(null);
+            selectAccount(selectedAccount);
+        }
+
+        private void textCharname_TextChanged(object sender, EventArgs e)
+        {
+            if (selectedAccount == null || this.listAccounts.SelectedItems.Count != 1)
+                return;
+
+            selectedAccount.Charname = textCharname.Text;
+            this.listAccounts.SelectedItems[0].Text = selectedAccount.Charname;
         }
     }
 }

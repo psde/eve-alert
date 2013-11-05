@@ -6,40 +6,72 @@ using System.Timers;
 using System.IO;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using evealert.Alerts;
 
 namespace evealert
 {
-    class GameLogAlert : Alert
-    {        
+    public class GameLogAlert : Alert<GameLogAlertFactory>
+    {
         private System.Timers.Timer timer;
         private string directory;
         private string file;
-        private string characterName;
         private DateTime lastTime;
 
         private DateTime lastHitToTime;
         private DateTime lastHitFromTime;
 
-        private List<string> specialWords;
         private DateTime lastSpecialWordTime;
 
-        public GameLogAlert(AlertCallback callback, string characterName, List<string> specialWords)
-        : base(callback)
+        [DataMemberAttribute]
+        public List<string> specialWords;
+
+        [DataMemberAttribute]
+        public string characterName;
+
+        internal GameLogAlert() { }
+        public GameLogAlert(string characterName, List<string> specialWords)
+        {
+            this.characterName = characterName;
+            this.specialWords = specialWords;
+
+            init();
+        }
+
+        protected override void init()
+        {
+            this.directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\EVE\logs\Gamelogs\";
+            timer = new System.Timers.Timer(10000);
+            timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+        }
+
+        public List<string> getKeywords()
+        {
+            return this.specialWords;
+        }
+
+        public string getCharacterName()
+        {
+            return this.characterName;
+        }
+
+        public override string GetName()
+        {
+            return "Game Log Alert";
+        }
+
+        public override string GetDescription()
+        {
+            return String.Join(",", this.specialWords);
+        }
+
+        public override void start()
         {
             this.lastTime = DateTime.UtcNow - TimeSpan.FromMinutes(10);
             this.lastHitToTime = DateTime.UtcNow - TimeSpan.FromMinutes(5);
             this.lastHitFromTime = DateTime.UtcNow - TimeSpan.FromMinutes(5);
             this.lastSpecialWordTime = DateTime.UtcNow - TimeSpan.FromMinutes(5);
-            this.directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\EVE\logs\Gamelogs\";
-            this.characterName = characterName;
-            this.specialWords = specialWords;
-
-            timer = new System.Timers.Timer(10000);
-            timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-        }        
-        
-        public override void start()
-        {
             timer.Start();
         }
 
@@ -172,6 +204,34 @@ namespace evealert
                 }
             }
         }
+    }
 
+    public class GameLogAlertFactory : AlertFactory<GameLogAlert>
+    {
+        public override string GetName()
+        {
+            return "Game Log Alert Factory";
+        }
+
+        public override AlertInterface Create(String charname)
+        {
+            GameLogAlertForm form = new GameLogAlertForm(new List<String>());
+            DialogResult result = form.ShowDialog();
+            if (result != DialogResult.OK)
+                return null;
+
+            return new GameLogAlert(charname, form.getKeywords());
+        }
+
+        public override AlertInterface Modify(AlertInterface original)
+        {
+            GameLogAlert alert = (GameLogAlert)original;
+            GameLogAlertForm form = new GameLogAlertForm(alert.getKeywords());
+            DialogResult result = form.ShowDialog();
+            if (result != DialogResult.OK)
+                return original;
+
+            return new GameLogAlert(alert.getCharacterName(), form.getKeywords());
+        }
     }
 }

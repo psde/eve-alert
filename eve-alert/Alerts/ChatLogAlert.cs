@@ -6,32 +6,54 @@ using System.IO;
 using System.Windows.Forms;
 using System.Timers;
 using System.Globalization;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using evealert.Alerts;
 
 namespace evealert
 {
-    class LogAlert : Alert
+    public class ChatLogAlert : Alert<ChatLogAlertFactory>
     {
         private System.Timers.Timer timer;
         private string directory;
         private string file;
-        private string channel;
         private DateTime lastTime;
-        private List<string> systems;
 
-        public LogAlert(AlertCallback callback, List<string> systems, string channel)
-        : base(callback)
+        [DataMemberAttribute]
+        public List<string> systems;
+
+        [DataMemberAttribute]
+        public string channel;
+
+        internal ChatLogAlert() { }
+        public ChatLogAlert(List<string> systems, string channel)
         {
-            this.lastTime = DateTime.UtcNow - TimeSpan.FromMinutes(10);
-            this.directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\EVE\logs\Chatlogs\";
             this.systems = systems;
             this.channel = channel;
 
+            init();
+        }
+
+        protected override void init()
+        {
+            this.directory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\EVE\logs\Chatlogs\";
             timer = new System.Timers.Timer(1000);
             timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
         }
 
+        public override string GetName()
+        {
+            return "Chat Log Alert";
+        }
+
+        public override string GetDescription()
+        {
+            return "#" + this.channel + ": " + String.Join(",", this.systems);
+        }
+
         public override void start()
         {
+            this.lastTime = DateTime.UtcNow - TimeSpan.FromMinutes(10);
             timer.Start();
         }
 
@@ -121,6 +143,35 @@ namespace evealert
                 timer.Stop();
                 MessageBox.Show(exc.Message);
             }
+        }
+    }
+
+    public class ChatLogAlertFactory : AlertFactory<ChatLogAlert>
+    {
+        public override string GetName()
+        {
+            return "Chat Log Alert Factory";
+        }
+
+        public override AlertInterface Create(String charname)
+        {
+            ChatLogAlertForm form = new ChatLogAlertForm(new List<string>(), "");
+            DialogResult result = form.ShowDialog();
+            if (result != DialogResult.OK)
+                return null;
+
+            return new ChatLogAlert(form.getSystems(), form.getChannel());
+        }
+
+        public override AlertInterface Modify(AlertInterface original)
+        {
+            ChatLogAlert alert = (ChatLogAlert)original;
+            ChatLogAlertForm form = new ChatLogAlertForm(alert.systems, alert.channel);
+            DialogResult result = form.ShowDialog();
+            if (result != DialogResult.OK)
+                return original;
+
+            return new ChatLogAlert(form.getSystems(), form.getChannel());
         }
     }
 }
