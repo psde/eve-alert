@@ -3,6 +3,8 @@ eve-alert
 
 Monitors an EVE-Online intel channel and character gamelogs for status on systems and incoming/outgoing damage notifications. It will alert the user under different conditions with playing a sound and/or showing a notification onscreen.
 
+Please make sure to init the git submodules.
+
 Todo
 ----
 
