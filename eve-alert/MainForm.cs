@@ -140,6 +140,13 @@ namespace evealert
             this.buttonAddAlert.Enabled = (selectedAccount != null);
             this.buttonRemoveAlert.Enabled = (selectedAlert != null);
             this.buttonConfigureAlert.Enabled = (selectedAlert != null);
+            this.buttonToggleAlert.Enabled = (selectedAlert != null);
+
+            this.buttonToggleAlert.Text = "Disable";
+            if (selectedAlert != null && selectedAlert.Enabled == false)
+            {
+                this.buttonToggleAlert.Text = "Enable";
+            }
         }
 
         private void selectAccount(Account acc)
@@ -152,13 +159,16 @@ namespace evealert
             if (acc == null)
             {
                 this.textCharname.Text = "";
+                this.checkEnabled.Checked = false;
                 return;
             }
 
             textCharname.Text = acc.Charname;
+            this.checkEnabled.Checked = acc.Enabled;
             foreach(AlertInterface alert in acc.alertModules)
             {
-                ListViewItem newItem = new ListViewItem(alert.GetName()); 
+                ListViewItem newItem = new ListViewItem(alert.GetName());
+                newItem.SubItems.Add(alert.Enabled.ToString());
                 newItem.SubItems.Add(alert.GetDescription());
                 newItem.Tag = alert;
                 listModules.Items.Add(newItem);
@@ -191,9 +201,15 @@ namespace evealert
                 notificationForm = new NotificationForm(settings);
                 foreach (Account acc in settings.Accounts)
                 {
+                    if (acc.Enabled == false)
+                        continue;
+
                     foreach (AlertInterface alert in acc.alertModules)
                     {
-                        alert.start();
+                        if (alert.Enabled)
+                        {
+                            alert.start();
+                        }
                     }
                 }
             }
@@ -201,9 +217,15 @@ namespace evealert
             {
                 foreach (Account acc in settings.Accounts)
                 {
+                    if (acc.Enabled == false)
+                        continue;
+
                     foreach (AlertInterface alert in acc.alertModules)
                     {
-                        alert.stop();
+                        if (alert.Enabled)
+                        {
+                            alert.stop();
+                        }
                     }
                 }
             }
@@ -356,6 +378,7 @@ namespace evealert
             List<AlertFactoryInterface> alerts = new List<AlertFactoryInterface>();
             alerts.Add(ChatLogAlert.factory);
             alerts.Add(GameLogAlert.factory);
+            alerts.Add(ScreenCaptureAlert.factory);
 
             NewAlert dialog = new NewAlert(alerts, selectedAccount.Charname);
             dialog.ShowDialog();
@@ -397,6 +420,27 @@ namespace evealert
 
             selectedAccount.Charname = textCharname.Text;
             this.listAccounts.SelectedItems[0].Text = selectedAccount.Charname;
+        }
+
+        private void checkEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            if (selectedAccount == null || this.listAccounts.SelectedItems.Count != 1)
+                return;
+
+            selectedAccount.Enabled = this.checkEnabled.Checked;
+        }
+
+        private void buttonToggleAlert_Click(object sender, EventArgs e)
+        {
+            if (this.listModules.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            AlertInterface alert = (AlertInterface)this.listModules.SelectedItems[0].Tag;
+            int index = selectedAccount.alertModules.FindIndex(foo => foo == alert);
+            selectedAccount.alertModules[index].Enabled = !selectedAccount.alertModules[index].Enabled;
+            selectAccount(selectedAccount);
         }
     }
 }

@@ -32,9 +32,11 @@
             this.pictureBox = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuSelectRegion = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuResetRegion = new System.Windows.Forms.ToolStripMenuItem();
             this.menuToggleBorder = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMinimize = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuOpacity = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -46,7 +48,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.Location = new System.Drawing.Point(0, 0);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(104, 100);
+            this.pictureBox.Size = new System.Drawing.Size(106, 105);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
@@ -58,46 +60,63 @@
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuSelectRegion,
-            this.toolStripSeparator1,
+            this.menuResetRegion,
+            this.toolStripSeparator2,
+            this.menuOpacity,
             this.menuToggleBorder,
             this.menuMinimize});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 98);
+            this.contextMenuStrip.Size = new System.Drawing.Size(155, 120);
             // 
             // menuSelectRegion
             // 
             this.menuSelectRegion.Name = "menuSelectRegion";
-            this.menuSelectRegion.Size = new System.Drawing.Size(152, 22);
-            this.menuSelectRegion.Text = "Select Region";
+            this.menuSelectRegion.Size = new System.Drawing.Size(154, 22);
+            this.menuSelectRegion.Text = "Select Region ...";
             this.menuSelectRegion.Click += new System.EventHandler(this.menuSelectRegion_Click);
             // 
-            // toolStripSeparator1
+            // menuResetRegion
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.menuResetRegion.Enabled = false;
+            this.menuResetRegion.Name = "menuResetRegion";
+            this.menuResetRegion.Size = new System.Drawing.Size(154, 22);
+            this.menuResetRegion.Text = "Reset Region";
+            this.menuResetRegion.Click += new System.EventHandler(this.menuResetRegion_Click);
             // 
             // menuToggleBorder
             // 
             this.menuToggleBorder.Name = "menuToggleBorder";
-            this.menuToggleBorder.Size = new System.Drawing.Size(152, 22);
-            this.menuToggleBorder.Text = "Toggle Border";
+            this.menuToggleBorder.Size = new System.Drawing.Size(154, 22);
+            this.menuToggleBorder.Text = "Borderless";
             this.menuToggleBorder.Click += new System.EventHandler(this.menuToggleBorder_Click);
             // 
             // menuMinimize
             // 
             this.menuMinimize.Name = "menuMinimize";
-            this.menuMinimize.Size = new System.Drawing.Size(152, 22);
+            this.menuMinimize.Size = new System.Drawing.Size(154, 22);
             this.menuMinimize.Text = "Minimize";
             this.menuMinimize.Click += new System.EventHandler(this.menuMinimize_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(151, 6);
+            // 
+            // menuOpacity
+            // 
+            this.menuOpacity.Name = "menuOpacity";
+            this.menuOpacity.Size = new System.Drawing.Size(154, 22);
+            this.menuOpacity.Text = "Opacity";
             // 
             // ScreenCaptureForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(104, 100);
+            this.ClientSize = new System.Drawing.Size(106, 105);
             this.ControlBox = false;
             this.Controls.Add(this.pictureBox);
             this.Name = "ScreenCaptureForm";
+            this.Opacity = 0.5D;
             this.ShowInTaskbar = false;
             this.TopMost = true;
             this.Resize += new System.EventHandler(this.ScreenCaptureForm_Resize);
@@ -113,7 +132,9 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem menuSelectRegion;
         private System.Windows.Forms.ToolStripMenuItem menuMinimize;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuToggleBorder;
+        private System.Windows.Forms.ToolStripMenuItem menuResetRegion;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem menuOpacity;
     }
 }

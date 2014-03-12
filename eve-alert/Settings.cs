@@ -13,10 +13,13 @@ namespace evealert
     {
         public string Charname { get; set; }
 
+        public bool Enabled { get; set; }
+
         public List<AlertInterface> alertModules { get; set; }
 
         public Account()
         {
+            Enabled = true;
             alertModules = new List<AlertInterface>();
         }
 

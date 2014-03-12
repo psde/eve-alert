@@ -12,8 +12,10 @@ namespace evealert
 
     [KnownType(typeof(ChatLogAlert))]
     [KnownType(typeof(GameLogAlert))]
+    [KnownType(typeof(ScreenCaptureAlert))]
     public abstract class AlertInterface
     {
+        public bool Enabled;
         public abstract void start();
         public abstract void stop();
         public abstract bool isStarted();
@@ -56,6 +58,7 @@ namespace evealert
 
         public Alert()
         {
+            this.Enabled = true;
         }
 
         [OnDeserialized]

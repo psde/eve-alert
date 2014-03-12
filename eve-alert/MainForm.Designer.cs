@@ -43,13 +43,15 @@
             this.listAccounts = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.groupCharacterSettings = new System.Windows.Forms.GroupBox();
+            this.buttonToggleAlert = new System.Windows.Forms.Button();
+            this.checkEnabled = new System.Windows.Forms.CheckBox();
             this.buttonConfigureAlert = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.buttonRemoveAlert = new System.Windows.Forms.Button();
             this.buttonAddAlert = new System.Windows.Forms.Button();
             this.listModules = new System.Windows.Forms.ListView();
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnDesc = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label5 = new System.Windows.Forms.Label();
             this.textCharname = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -61,6 +63,7 @@
             this.columnHeaderTitle = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderMessage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.buttonStartStop = new System.Windows.Forms.Button();
+            this.columnEnabled = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextNotify.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.groupCharacterSettings.SuspendLayout();
@@ -106,7 +109,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(527, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(592, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -150,7 +153,7 @@
             this.listAccounts.Location = new System.Drawing.Point(12, 28);
             this.listAccounts.MultiSelect = false;
             this.listAccounts.Name = "listAccounts";
-            this.listAccounts.Size = new System.Drawing.Size(118, 204);
+            this.listAccounts.Size = new System.Drawing.Size(118, 304);
             this.listAccounts.TabIndex = 5;
             this.listAccounts.UseCompatibleStateImageBehavior = false;
             this.listAccounts.View = System.Windows.Forms.View.Details;
@@ -166,6 +169,8 @@
             this.groupCharacterSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupCharacterSettings.Controls.Add(this.buttonToggleAlert);
+            this.groupCharacterSettings.Controls.Add(this.checkEnabled);
             this.groupCharacterSettings.Controls.Add(this.buttonConfigureAlert);
             this.groupCharacterSettings.Controls.Add(this.button2);
             this.groupCharacterSettings.Controls.Add(this.buttonRemoveAlert);
@@ -176,15 +181,37 @@
             this.groupCharacterSettings.Controls.Add(this.label4);
             this.groupCharacterSettings.Location = new System.Drawing.Point(137, 28);
             this.groupCharacterSettings.Name = "groupCharacterSettings";
-            this.groupCharacterSettings.Size = new System.Drawing.Size(381, 204);
+            this.groupCharacterSettings.Size = new System.Drawing.Size(446, 304);
             this.groupCharacterSettings.TabIndex = 6;
             this.groupCharacterSettings.TabStop = false;
             this.groupCharacterSettings.Text = "Character Settings";
             // 
+            // buttonToggleAlert
+            // 
+            this.buttonToggleAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.buttonToggleAlert.Location = new System.Drawing.Point(258, 275);
+            this.buttonToggleAlert.Name = "buttonToggleAlert";
+            this.buttonToggleAlert.Size = new System.Drawing.Size(75, 23);
+            this.buttonToggleAlert.TabIndex = 15;
+            this.buttonToggleAlert.Text = "Toggle";
+            this.buttonToggleAlert.UseVisualStyleBackColor = true;
+            this.buttonToggleAlert.Click += new System.EventHandler(this.buttonToggleAlert_Click);
+            // 
+            // checkEnabled
+            // 
+            this.checkEnabled.AutoSize = true;
+            this.checkEnabled.Location = new System.Drawing.Point(15, 49);
+            this.checkEnabled.Name = "checkEnabled";
+            this.checkEnabled.Size = new System.Drawing.Size(65, 17);
+            this.checkEnabled.TabIndex = 14;
+            this.checkEnabled.Text = "Enabled";
+            this.checkEnabled.UseVisualStyleBackColor = true;
+            this.checkEnabled.CheckedChanged += new System.EventHandler(this.checkEnabled_CheckedChanged);
+            // 
             // buttonConfigureAlert
             // 
             this.buttonConfigureAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonConfigureAlert.Location = new System.Drawing.Point(96, 175);
+            this.buttonConfigureAlert.Location = new System.Drawing.Point(96, 275);
             this.buttonConfigureAlert.Name = "buttonConfigureAlert";
             this.buttonConfigureAlert.Size = new System.Drawing.Size(75, 23);
             this.buttonConfigureAlert.TabIndex = 13;
@@ -195,7 +222,7 @@
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(293, 175);
+            this.button2.Location = new System.Drawing.Point(358, 275);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 12;
@@ -206,7 +233,7 @@
             // buttonRemoveAlert
             // 
             this.buttonRemoveAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRemoveAlert.Location = new System.Drawing.Point(177, 175);
+            this.buttonRemoveAlert.Location = new System.Drawing.Point(177, 275);
             this.buttonRemoveAlert.Name = "buttonRemoveAlert";
             this.buttonRemoveAlert.Size = new System.Drawing.Size(75, 23);
             this.buttonRemoveAlert.TabIndex = 11;
@@ -217,7 +244,7 @@
             // buttonAddAlert
             // 
             this.buttonAddAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonAddAlert.Location = new System.Drawing.Point(15, 175);
+            this.buttonAddAlert.Location = new System.Drawing.Point(15, 275);
             this.buttonAddAlert.Name = "buttonAddAlert";
             this.buttonAddAlert.Size = new System.Drawing.Size(75, 23);
             this.buttonAddAlert.TabIndex = 9;
@@ -231,32 +258,33 @@
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.listModules.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader2,
-            this.columnHeader3});
+            this.columnType,
+            this.columnEnabled,
+            this.columnDesc});
             this.listModules.FullRowSelect = true;
             this.listModules.HideSelection = false;
-            this.listModules.Location = new System.Drawing.Point(15, 69);
+            this.listModules.Location = new System.Drawing.Point(15, 85);
             this.listModules.MultiSelect = false;
             this.listModules.Name = "listModules";
-            this.listModules.Size = new System.Drawing.Size(353, 100);
+            this.listModules.Size = new System.Drawing.Size(418, 184);
             this.listModules.TabIndex = 8;
             this.listModules.UseCompatibleStateImageBehavior = false;
             this.listModules.View = System.Windows.Forms.View.Details;
             this.listModules.SelectedIndexChanged += new System.EventHandler(this.listModules_SelectedIndexChanged);
             // 
-            // columnHeader2
+            // columnType
             // 
-            this.columnHeader2.Text = "Type";
+            this.columnType.Text = "Type";
             // 
-            // columnHeader3
+            // columnDesc
             // 
-            this.columnHeader3.Text = "Description";
-            this.columnHeader3.Width = 275;
+            this.columnDesc.Text = "Description";
+            this.columnDesc.Width = 275;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 53);
+            this.label5.Location = new System.Drawing.Point(12, 69);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(50, 13);
             this.label5.TabIndex = 7;
@@ -268,7 +296,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.textCharname.Location = new System.Drawing.Point(92, 23);
             this.textCharname.Name = "textCharname";
-            this.textCharname.Size = new System.Drawing.Size(276, 20);
+            this.textCharname.Size = new System.Drawing.Size(341, 20);
             this.textCharname.TabIndex = 6;
             this.textCharname.TextChanged += new System.EventHandler(this.textCharname_TextChanged);
             // 
@@ -284,7 +312,7 @@
             // buttonAddAccount
             // 
             this.buttonAddAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonAddAccount.Location = new System.Drawing.Point(12, 238);
+            this.buttonAddAccount.Location = new System.Drawing.Point(12, 338);
             this.buttonAddAccount.Name = "buttonAddAccount";
             this.buttonAddAccount.Size = new System.Drawing.Size(33, 23);
             this.buttonAddAccount.TabIndex = 12;
@@ -295,7 +323,7 @@
             // buttonRemoveAccount
             // 
             this.buttonRemoveAccount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonRemoveAccount.Location = new System.Drawing.Point(51, 238);
+            this.buttonRemoveAccount.Location = new System.Drawing.Point(51, 338);
             this.buttonRemoveAccount.Name = "buttonRemoveAccount";
             this.buttonRemoveAccount.Size = new System.Drawing.Size(33, 23);
             this.buttonRemoveAccount.TabIndex = 13;
@@ -311,10 +339,10 @@
             this.columnHeaderTitle,
             this.columnHeaderMessage});
             this.listLog.FullRowSelect = true;
-            this.listLog.Location = new System.Drawing.Point(161, 341);
+            this.listLog.Location = new System.Drawing.Point(137, 338);
             this.listLog.MultiSelect = false;
             this.listLog.Name = "listLog";
-            this.listLog.Size = new System.Drawing.Size(355, 138);
+            this.listLog.Size = new System.Drawing.Size(218, 110);
             this.listLog.TabIndex = 16;
             this.listLog.UseCompatibleStateImageBehavior = false;
             this.listLog.View = System.Windows.Forms.View.Details;
@@ -340,7 +368,7 @@
             // buttonStartStop
             // 
             this.buttonStartStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonStartStop.Location = new System.Drawing.Point(443, 238);
+            this.buttonStartStop.Location = new System.Drawing.Point(508, 338);
             this.buttonStartStop.Name = "buttonStartStop";
             this.buttonStartStop.Size = new System.Drawing.Size(75, 23);
             this.buttonStartStop.TabIndex = 14;
@@ -348,11 +376,15 @@
             this.buttonStartStop.UseVisualStyleBackColor = true;
             this.buttonStartStop.Click += new System.EventHandler(this.buttonStartStop_Click);
             // 
+            // columnEnabled
+            // 
+            this.columnEnabled.Text = "Enabled";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 273);
+            this.ClientSize = new System.Drawing.Size(592, 373);
             this.Controls.Add(this.listLog);
             this.Controls.Add(this.buttonStartStop);
             this.Controls.Add(this.groupCharacterSettings);
@@ -361,7 +393,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.buttonAddAccount);
             this.MainMenuStrip = this.menuStrip1;
-            this.MinimumSize = new System.Drawing.Size(535, 300);
+            this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "MainForm";
             this.Text = "Eve-Alert";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -401,8 +433,8 @@
         private System.Windows.Forms.Button buttonRemoveAccount;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ListView listModules;
-        private System.Windows.Forms.ColumnHeader columnHeader2;
-        private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ColumnHeader columnType;
+        private System.Windows.Forms.ColumnHeader columnDesc;
         private System.Windows.Forms.Button buttonConfigureAlert;
         private System.Windows.Forms.ListView listLog;
         private System.Windows.Forms.ColumnHeader columnHeaderTime;
@@ -410,6 +442,9 @@
         private System.Windows.Forms.ColumnHeader columnHeaderTitle;
         private System.Windows.Forms.ColumnHeader columnHeaderMessage;
         private System.Windows.Forms.Button buttonStartStop;
+        private System.Windows.Forms.CheckBox checkEnabled;
+        private System.Windows.Forms.Button buttonToggleAlert;
+        private System.Windows.Forms.ColumnHeader columnEnabled;
     }
 }
 

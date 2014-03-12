@@ -10,15 +10,27 @@ using System.Drawing;
 using System.Timers;
 using evealert.Alerts;
 using System.Windows.Forms;
+using System.Runtime.Serialization;
 
 namespace evealert
 {
-    public class ScreenCaptureAlert : Alert<ChatLogAlertFactory>
+    public class ScreenCaptureAlert : Alert<ScreenCaptureAlertFactory>
     {
         private CaptureProcess captureProcess = null;
-        private string characterName;
         private ScreenCaptureForm captureForm;
         private System.Timers.Timer timer;
+
+        [DataMemberAttribute]
+        public string characterName;
+
+        [DataMemberAttribute]
+        public Rectangle selectedRegion;
+
+        [DataMemberAttribute]
+        public int opacity;
+
+        [DataMemberAttribute]
+        public bool borderless;
 
         delegate bool EnumThreadDelegate(IntPtr hWnd, IntPtr lParam);
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
@@ -49,6 +61,9 @@ namespace evealert
         public ScreenCaptureAlert(string characterName)
         {
             this.characterName = characterName;
+            this.selectedRegion = new Rectangle(0, 0, 0, 0);
+            this.opacity = 100;
+            this.borderless = false;
 
             init();
         }
@@ -56,6 +71,8 @@ namespace evealert
         protected override void init()
         {
             this.captureForm = new ScreenCaptureForm(this);
+            this.captureForm.setOpacity(this.opacity);
+            this.captureForm.setBorderless(this.borderless);
 
             timer = new System.Timers.Timer(2000);
             timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
@@ -65,6 +82,12 @@ namespace evealert
         {
             this.captureForm = null;
             this.captureProcess = null;
+        }
+
+        public void setSelectedRetion(Rectangle rect)
+        {
+            this.selectedRegion = rect;
+            this.OnTimedEvent(null, null);
         }
 
         private Process getProcess()
@@ -104,7 +127,7 @@ namespace evealert
 
             CaptureConfig cc = new CaptureConfig()
             {
-                Direct3DVersion = Direct3DVersion.AutoDetect,
+                Direct3DVersion = Direct3DVersion.Direct3D9,
                 ShowOverlay = false
             };
 
@@ -112,7 +135,7 @@ namespace evealert
             captureInterface.RemoteMessage += new MessageReceivedEvent(CaptureInterface_RemoteMessage);
             captureProcess = new CaptureProcess(process, cc, captureInterface);
 
-            captureProcess.CaptureInterface.BeginGetScreenshot(new Rectangle(0, 0, 0, 0), new TimeSpan(0, 0, 1), Callback);
+            captureProcess.CaptureInterface.BeginGetScreenshot(this.selectedRegion, new TimeSpan(0, 0, 1), Callback);
             captureForm.Show();
 
             timer.Start();
@@ -122,13 +145,26 @@ namespace evealert
         {
             timer.Stop();
             captureForm.Hide();
-            captureProcess.CaptureInterface.Disconnect();
+            if(captureProcess != null)
+                captureProcess.CaptureInterface.Disconnect();
             captureProcess = null;
         }
 
         public override bool isStarted()
         {
             return captureProcess == null;
+        }
+
+        public void setOpacity(int o)
+        {
+            this.opacity = o;
+            this.captureForm.setOpacity(this.opacity);
+        }
+
+        public void setBorderless(bool b)
+        {
+            this.borderless = b;
+            this.captureForm.setBorderless(this.borderless);
         }
 
         void CaptureInterface_RemoteMessage(MessageReceivedEventArgs message)
@@ -138,11 +174,14 @@ namespace evealert
 
         void Callback(IAsyncResult result)
         {
+            if (captureProcess == null)
+                return;
+
             Screenshot screenshot = captureProcess.CaptureInterface.EndGetScreenshot(result);
             
             try
             {
-                //captureProcess.CaptureInterface.DisplayInGameText("Screenshot captured...");
+                captureProcess.CaptureInterface.DisplayInGameText("Screenshot captured...");
                 this.captureForm.showScreenshot(screenshot.CapturedBitmap.ToBitmap());
             }
             catch
@@ -152,7 +191,7 @@ namespace evealert
 
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            captureProcess.CaptureInterface.BeginGetScreenshot(new Rectangle(0, 0, 0, 0), new TimeSpan(0, 0, 1), Callback);
+            captureProcess.CaptureInterface.BeginGetScreenshot(this.selectedRegion, new TimeSpan(0, 0, 1), Callback);
         }
     }
 
@@ -165,23 +204,24 @@ namespace evealert
 
         public override AlertInterface Create(String charname)
         {
-            ChatLogAlertForm form = new ChatLogAlertForm(new List<string>(), "");
-            DialogResult result = form.ShowDialog();
-            if (result != DialogResult.OK)
-                return null;
+            //ChatLogAlertForm form = new ChatLogAlertForm(new List<string>(), "");
+            //DialogResult result = form.ShowDialog();
+            //if (result != DialogResult.OK)
+            //    return null;
 
             return new ScreenCaptureAlert(charname);
         }
 
         public override AlertInterface Modify(AlertInterface original)
         {
-            ChatLogAlert alert = (ChatLogAlert)original;
-            ChatLogAlertForm form = new ChatLogAlertForm(alert.systems, alert.channel);
-            DialogResult result = form.ShowDialog();
-            if (result != DialogResult.OK)
-                return original;
+            return original;
+            //ChatLogAlert alert = (ChatLogAlert)original;
+            //ChatLogAlertForm form = new ChatLogAlertForm(alert.systems, alert.channel);
+            //DialogResult result = form.ShowDialog();
+            //if (result != DialogResult.OK)
+            //    return original;
 
-            return new ChatLogAlert(form.getSystems(), form.getChannel());
+            //return new ChatLogAlert(form.getSystems(), form.getChannel());
         }
     }
 }
