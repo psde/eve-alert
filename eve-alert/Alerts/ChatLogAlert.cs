@@ -104,8 +104,9 @@ namespace evealert
 
                         foreach (string system in this.systems)
                         {
-                            string abbrvSystem = system;
+                            List<string> abbrvSystem = new List<string>();
                             /*
+                            string abbrvSystem = "";
                             if (system.Length >= 3)
                             {
                                 abbrvSystem = system.Substring(0, system.IndexOf("-"));
@@ -114,11 +115,14 @@ namespace evealert
                                     abbrvSystem = system.Substring(0, 2);
                                 }
                             }*/
-                            abbrvSystem = system.Substring(0, 3); //To me it seems like everyone's using the first 3 letters, no matter the dashes  --Bittey
 
-                            string lowerBody = body.ToLower();
+                            for (int i = 3; i <= 5;i++ )
+                                abbrvSystem.Add(system.Substring(0, i).ToLowerInvariant());
 
-                            if (lowerBody.Contains(system.ToLower()) || StringIsolated(abbrvSystem.ToLower(),lowerBody))
+                            string lowerBody = body.ToLowerInvariant();
+
+                            if (lowerBody.Contains(system.ToLowerInvariant()) 
+                                || abbrvSystem.Exists(x => StringIsolated(x,lowerBody)))
                             {
                                 if (Settings.StatusWords.Exists(x => lowerBody.Contains(x)))
                                 {
