@@ -105,6 +105,7 @@ namespace evealert
                         foreach (string system in this.systems)
                         {
                             string abbrvSystem = system;
+                            /*
                             if (system.Length >= 3)
                             {
                                 abbrvSystem = system.Substring(0, system.IndexOf("-"));
@@ -112,17 +113,18 @@ namespace evealert
                                 {
                                     abbrvSystem = system.Substring(0, 2);
                                 }
-                            }
+                            }*/
+                            abbrvSystem = system.Substring(0, 3); //To me it seems like everyone's using the first 3 letters, no matter the dashes  --Bittey
 
                             string lowerBody = body.ToLower();
 
-                            if (lowerBody.IndexOf(system.ToLower()) != -1 || lowerBody.IndexOf(" " + abbrvSystem.ToLower() + " ") != -1)
+                            if (lowerBody.Contains(system.ToLower()) || StringIsolated(abbrvSystem.ToLower(),lowerBody))
                             {
-                                if (lowerBody.IndexOf("status") != -1)
+                                if (Settings.StatusWords.Exists(x => lowerBody.Contains(x)))
                                 {
                                     // Nothing
                                 }
-                                else if (lowerBody.IndexOf("clear") != -1 || lowerBody.IndexOf("clr") != -1)
+                                else if (Settings.ClearWords.Exists(x => lowerBody.Contains(x)))
                                 {
                                     // System clear
                                     notify(dateTime, false, this.channel, system + ": " + sender + " > " + body);
@@ -144,6 +146,21 @@ namespace evealert
                 MessageBox.Show(exc.Message);
             }
         }
+
+        /// <summary>
+        /// Returns true if substring is contained in line and is a seperate word.
+        /// </summary>
+        bool StringIsolated(string substring, string line)
+        {
+            if (line.StartsWith(substring + " "))
+                return true;
+            if (line.EndsWith(" " + substring))
+                return true;
+            if (line.Contains(" " + substring + " "))
+                return true;
+            return false; //if substring == line, it yields no information, so just ignore.
+        }
+
     }
 
     public class ChatLogAlertFactory : AlertFactory<ChatLogAlert>

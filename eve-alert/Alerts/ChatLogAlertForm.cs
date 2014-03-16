@@ -35,12 +35,12 @@ namespace evealert.Alerts
 
         public String getChannel()
         {
-            return this.textChannel.Text;
+            return this.textChannel.Text.Trim();
         }
 
         public List<string> getSystems()
         {
-            return this.textSystems.Text.Split(new char[] { ',' }).ToList();
+            return this.textSystems.Text.Split(new char[] { ',' }).ToList().Select(x => x.Trim()).ToList(); //trim down whitespaces
         }
     }
 }

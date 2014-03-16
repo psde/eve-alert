@@ -45,6 +45,12 @@ namespace evealert
 
         public List<Account> Accounts { get; set; }
 
+        [NonSerialized]
+        public static List<string> ClearWords = new List<string>(new string[] {"clr", "clear", "blue", "green", "empty"});
+        [NonSerialized]
+        public static List<string> StatusWords = new List<string>(new string[] {"stat", "eyes"});
+
+
         public Settings()
         {
             this.Accounts = new List<Account>();

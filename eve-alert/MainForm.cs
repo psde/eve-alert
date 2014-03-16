@@ -233,9 +233,10 @@ namespace evealert
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Close?", "Closing...", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
 
-            if (result == System.Windows.Forms.DialogResult.No)
+            if (e.CloseReason != CloseReason.WindowsShutDown //just save data and exit asap.
+                && e.CloseReason != CloseReason.TaskManagerClosing
+                && MessageBox.Show("Close?", "Closing...", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == System.Windows.Forms.DialogResult.No)
             {
                 e.Cancel = true;
                 return;
